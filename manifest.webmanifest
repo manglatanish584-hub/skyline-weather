@@ -1,0 +1,62 @@
+{
+  "name": "Skyline — Live Weather, Air Quality & Sun Path",
+  "short_name": "Skyline",
+  "description": "Live weather, 24-hour temperature chart, sun path, air quality and a 7-day forecast for any city.",
+  "id": "/",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#120a14",
+  "theme_color": "#120a14",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["weather", "utilities", "lifestyle"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Mumbai",
+      "short_name": "Mumbai",
+      "url": "./?q=Mumbai&lat=19.0728&lon=72.8826",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Delhi",
+      "short_name": "Delhi",
+      "url": "./?q=Delhi&lat=28.6139&lon=77.209",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Bengaluru",
+      "short_name": "Bengaluru",
+      "url": "./?q=Bengaluru&lat=12.9716&lon=77.5946",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
