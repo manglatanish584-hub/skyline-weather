@@ -32,6 +32,7 @@ Then open <http://127.0.0.1:5500/>
 - Wind compass: needle, cardinal ticks, speed, gusts, Beaufort-style "feel"
 
 **UX**
+- Installable PWA: add to home screen, standalone window, works offline (cached shell)
 - Search with debounced autocomplete (↑ ↓ Enter Esc), Indian cities nudged up
 - "Use my location" (browser geolocation + reverse geocoding)
 - °C / °F toggle, remembered between visits, re-renders every chart
@@ -61,9 +62,27 @@ weather-web/
 ├── index.html
 ├── css/style.css
 ├── js/app.js
+├── manifest.webmanifest
+├── sw.js
+├── icons/            (192, 512, maskable, svg)
 ├── start-weather-web.bat
 └── README.md
 ```
+
+## Install as an app (PWA)
+
+The site is a full PWA — no app store needed.
+
+- **Android / Chrome / Edge:** open the site → browser menu → **"Install app"** / **"Add to Home screen"**
+  (desktop Chrome/Edge also shows an install icon in the address bar)
+- **iPhone / Safari:** Share → **"Add to Home Screen"**
+
+Once installed it opens in its own window (no address bar), keeps the sunset theme in the
+status bar, supports long-press shortcuts (Mumbai / Delhi / Bengaluru), and still opens when
+you are offline (cached shell — live weather obviously needs internet).
+
+When you change any file, bump the version in two places so users get the update:
+`CACHE_VERSION` in `sw.js` and the `?v=` query on the CSS/JS links in `index.html`.
 
 ## Make it public (free)
 
