@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Skyline — Live Weather, Air Quality &amp; Sun Path</title>
+<meta name="description" content="Live weather, 24-hour temperature chart, sun path, air quality and a 7-day forecast for any city. Powered by Open-Meteo." />
+<meta name="theme-color" content="#120a14" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='40' cy='24' r='11' fill='%23ffb347'/%3E%3Cpath d='M14 50h34a11 11 0 0 0 1.6-21.9A15.5 15.5 0 0 0 20 33a9 9 0 0 0-6 17z' fill='%23fdece2'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css?v=2" />
+</head>
+<body data-theme="default">
+
+  <div class="sky" aria-hidden="true"></div>
+  <canvas id="fx" aria-hidden="true"></canvas>
+
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Skyline home">
+      <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+        <circle cx="42" cy="24" r="10" fill="#ffb347" />
+        <path d="M14 50h34a11 11 0 0 0 1.6-21.9A15.5 15.5 0 0 0 20 33a9 9 0 0 0-6 17z" fill="#fdece2" />
+      </svg>
+      <span class="brand-name">Skyline</span>
+    </a>
+
+    <div class="search-wrap" id="searchWrap">
+      <form class="search" id="searchForm" role="search" autocomplete="off">
+        <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8" />
+          <path d="M16 16l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+        </svg>
+        <input id="searchInput" type="text" placeholder="Search city or town…" aria-label="Search city"
+               spellcheck="false" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="suggestions" />
+        <button type="button" class="icon-btn" id="geoBtn" title="Use my location" aria-label="Use my location">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8" />
+            <circle cx="12" cy="12" r="7.4" fill="none" stroke="currentColor" stroke-width="1.8" opacity=".55" />
+            <path d="M12 1.8v3M12 19.2v3M1.8 12h3M19.2 12h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+        </button>
+      </form>
+      <ul class="suggestions" id="suggestions" role="listbox" aria-label="City suggestions" hidden></ul>
+    </div>
+
+    <div class="unit-toggle" id="unitToggle" role="group" aria-label="Temperature unit">
+      <button type="button" data-unit="c" class="is-active" aria-pressed="true">°C</button>
+      <button type="button" data-unit="f" aria-pressed="false">°F</button>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <section class="intro" id="intro" hidden>
+      <h1>Weather, without the noise.</h1>
+      <p>Search any city for live conditions, an hour-by-hour outlook, air quality, the sun's path and a 7-day forecast.</p>
+      <div class="chips" id="chips" aria-label="Popular cities"></div>
+    </section>
+
+    <section class="weather" id="weather" hidden>
+      <article class="card hero" id="hero"></article>
+
+      <div class="grid">
+
+        <article class="card chart-card">
+          <div class="card-head">
+            <h2>Temperature · next 24h</h2>
+            <span class="hint" id="chartHint"></span>
+          </div>
+          <div class="chart" id="chart"></div>
+        </article>
+
+        <article class="card sun-card">
+          <div class="card-head">
+            <h2>Sun path</h2>
+            <span class="hint" id="sunHint"></span>
+          </div>
+          <div class="sun" id="sun"></div>
+        </article>
+
+        <article class="card hourly-card">
+          <div class="card-head">
+            <h2>Next 24 hours</h2>
+            <span class="hint" id="hourlyHint"></span>
+          </div>
+          <div class="hourly" id="hourly"></div>
+        </article>
+
+        <article class="card daily-card">
+          <div class="card-head">
+            <h2>7-day forecast</h2>
+          </div>
+          <div class="daily" id="daily"></div>
+        </article>
+
+        <article class="card details-card">
+          <div class="card-head">
+            <h2>Today's details</h2>
+          </div>
+          <div class="details" id="details"></div>
+        </article>
+
+        <article class="card aqi-card">
+          <div class="card-head">
+            <h2>Air quality</h2>
+            <span class="hint" id="aqiHint">US AQI</span>
+          </div>
+          <div id="aqi"></div>
+        </article>
+
+        <article class="card wind-card">
+          <div class="card-head">
+            <h2>Wind</h2>
+            <span class="hint" id="windHint"></span>
+          </div>
+          <div id="wind"></div>
+        </article>
+
+      </div>
+
+      <p class="footnote" id="footnote"></p>
+    </section>
+
+    <section class="state" id="state" hidden aria-live="polite">
+      <div class="spinner" aria-hidden="true"></div>
+      <p id="stateText">Loading weather…</p>
+    </section>
+
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/app.js?v=2" defer></script>
+</body>
+</html>
